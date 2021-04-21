@@ -1,0 +1,19 @@
+// to import this I used a yarn add date-fns
+import format from 'date-fns/format'; 
+import ptBR from 'date-fns/locale/pt-BR';
+
+import styles from './styles.module.scss'; // thats because of the .module (next thing)
+
+export function Header()
+{
+  const currentDate = format(new Date(), 'EEEEEE, d MMMM', { //https://date-fns.org/v2.21.1/docs/format to know about these letters
+    locale: ptBR,
+  });
+  return(
+    <header className={styles.headerContainer}>
+      <img src="/logo.svg" alt="Podcastr"></img>
+      <p>O melhor para você ouvir, sempre</p>
+      <span>{currentDate}</span>
+    </header>
+  );
+}

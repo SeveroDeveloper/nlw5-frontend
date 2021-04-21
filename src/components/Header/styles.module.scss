@@ -1,0 +1,22 @@
+.headerContainer {
+  background: var(--white);
+  height: 6.5rem;
+
+  display: flex;
+  align-items: center;
+
+  padding: 2rem 4rem;
+
+  border-bottom: 1px solid var(--gray-100); //hairline below header
+
+  p {
+    margin-left: 2rem; // 2 from the logo to the hairline
+    padding: 0.25rem 0 0.25rem 2rem;  // 0.25 space up and down, 2 from the hairline
+    border-left: 1px solid var(--gray-100); //hairline between logo and frase
+  }
+
+  span {
+    margin-left: auto; // go to the end
+    text-transform: capitalize; //capital letters
+  }
+}
