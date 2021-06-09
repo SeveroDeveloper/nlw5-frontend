@@ -46,10 +46,13 @@ export async function getServerSideProps() // execute before others
 // SSG -> require a "yarn build" and the "yarn start (not dev)"
 
 import { GetStaticProps } from 'next'; // importing the types of the function (parameters and returns)
+import Image from 'next/image';
 import { api } from '../services/api';
 import { format, parseISO } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import { convertDurationToTimeString } from '../utils/convertDurationToTimeString';
+
+import styles from './home.module.scss';
 
 type Episode = {
   id: string;
@@ -64,15 +67,49 @@ type Episode = {
 }
 
 type HomeProps = {
-  episodes: Episode[];
+  latestEpisodes: Episode[];
+  allEpisodes: Episode[];
 }
 
-export default function Home(props) {
+export default function Home( {latestEpisodes, allEpisodes} : HomeProps) {
  return (
-  <>
-  <h1>index</h1>
-  <p>{JSON.stringify(props.episodes)}</p> 
-  </>
+  <div className={styles.homePage}>
+  <section className={styles.latestEpisodes}>
+    <h2>
+      Últimos lançamentos
+    </h2>
+    <ul> 
+      {latestEpisodes.map(episode => {
+        return (
+          <li key={episode.id}>
+            <Image 
+            width={192} 
+            height={192} 
+            objectFit="cover"
+            src={episode.thumbnail} 
+            alt={episode.title}
+            />
+
+            <div className={styles.episodeDetails}>
+              <a href="">{episode.title}</a>
+              <p>{episode.members}</p>
+              <span>{episode.publishedAt}</span>
+              <span>{episode.durationAsString}</span>
+            </div>
+
+            <button type="button">
+              <img src="/play-green.svg" alt="play"/>
+            </button>
+          </li>
+        )
+      })}
+    </ul>
+  </section>
+
+  <section className={styles.allEpisodes}>
+
+  </section>
+  </div>
   )
 }
 export const getStaticProps: GetStaticProps = async () => // execute before others
@@ -101,9 +138,13 @@ export const getStaticProps: GetStaticProps = async () => // execute before othe
     };
   })
 
+  const latestEpisodes = episodes.slice(0, 2); // take two latest episodes
+  const allEpisodes = episodes.slice(2, episodes.length); // all others
+
   return{
     props: {
-      episodes,
+      latestEpisodes,
+      allEpisodes,
     },
     revalidate: 60 * 60 * 8,
   }
